@@ -61,6 +61,7 @@ void QueueDelHead(Queue *&q)
     temp = q->right;
     delete(q);
     q = temp;
+    delete(temp);
 }
 
 void QueueDelTail(Queue *&q)
