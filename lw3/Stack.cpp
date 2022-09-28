@@ -1,12 +1,4 @@
-#include <iostream>
-using namespace std;
-#define ElementType string
-
-struct Stack
-{
-    ElementType el;
-    Stack *next;
-};
+#include "Stack.h"
 
 
 bool isEmpty(Stack *s)
@@ -37,22 +29,13 @@ void print(Stack *s)
 {
     if(s != NULL)
     {
-        cout << s->el <<endl;
+        cout << s->el << endl;
         print(s->next);
     }
     
 }
 
-
-int main()
+ElementType seeHead(Stack *&s)
 {
-    Stack *stack;
-    stack = NULL;
-
-    cout << isEmpty(stack) << endl;
-    push(stack, "abcdef");
-    push(stack, "4321");
-    print(stack);
-
-    return 0;
+    return s->el;
 }
