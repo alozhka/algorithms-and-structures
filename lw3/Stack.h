@@ -17,4 +17,4 @@ extern bool         isEmpty(Stack *s);
 extern void         push(Stack *&s, ElementType el);
 extern void         pop(Stack *&s, ElementType el);
 extern void         print(Stack *s);
-extern ElementType  seeHead(Stack *&s);
+extern ElementType  head(Stack *&s);

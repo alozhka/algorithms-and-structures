@@ -35,7 +35,7 @@ void print(Stack *s)
     
 }
 
-ElementType seeHead(Stack *&s)
+ElementType head(Stack *&s)
 {
     return s->el;
 }
