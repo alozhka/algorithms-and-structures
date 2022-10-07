@@ -2,40 +2,66 @@
 #include <map>
 #include <stack>
 using namespace std;
-#define ElementType string
+#define ElementType char
 
 
 
 int main()
 {
-    FILE *f = fopen("in.txt", "r");
+    // FILE *f = fopen("in.txt", "r");
     stack <ElementType> stack;
-    ElementType s;
-    map<string, int> cases =
+    ElementType el;
+    map<ElementType, int> priority = 
     {
-        {"/", 0}, {"*", 0}, {"-", 0}, {"+", 0},
-        {"(", 1},
-        {")", 2},
+        {'(', 0}, {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2},
     };
+    map<ElementType, int>:: iterator iter;
     
-    while(!EOF)
+    if(cin.eof()) 
+        cout << "Строка не введена!" << endl;
+    while(!cin.eof())
     {
-        cin >> s;
-        switch (cases[s])
-        {
-            case 0:
+        cin >> el;
 
-                break;
-            case 1:  // (
-                stack.push(s);
-                break;
-        
-            default: // всё остальное
-                stack.push(s);
-                break;
+        if('0' <= el && el <= '9')
+        {
+            cout << el;
+        }
+
+        else if(el == '(')
+        {
+            stack.push(el);
+        }
+
+        else if(el == ')')
+        {
+            while(!stack.empty() && stack.top() != '(')
+            {
+                cout << stack.top();
+                stack.pop();
+            }
+        }
+
+        else
+        {
+            iter = priority.find(el);
+            if(iter != priority.end())
+            {
+                while( ( !stack.empty() ) && priority[stack.top()] >= priority[el])
+                {
+                    cout <<stack.top();
+                    stack.pop();
+                }
+                stack.pop();
+            }
         }
     }
-
     
-
+    while (!stack.empty())
+	{
+		cout << stack.top();
+		stack.pop();
+	}
+	cout << endl;
+    return 0;
 }
