@@ -1,14 +1,13 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <stack>
-using namespace std;
 #define ElementType char
+using namespace std;
 
 
-
-int main()
+int ArithmecitExchange(string dest)
 {
-    // FILE *f = fopen("in.txt", "r");
     stack <ElementType> stack;
     ElementType el;
     map<ElementType, int> priority = 
@@ -16,13 +15,19 @@ int main()
         {'(', 0}, {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2},
     };
     map<ElementType, int>:: iterator iter;
-    
-    if(cin.eof()) 
-        cout << "Строка не введена!" << endl;
-    while(!cin.eof())
-    {
-        cin >> el;
 
+    fstream file;
+    file.open(dest);
+
+
+    if(!file.is_open()) 
+    {
+        cout << "Строка не введена!" << endl;
+        file.close();
+        return 1;
+    }
+    for(file >> el; !file.eof(); file >> el)
+    {
         if('0' <= el && el <= '9')
         {
             cout << el;
@@ -40,6 +45,7 @@ int main()
                 cout << stack.top();
                 stack.pop();
             }
+            stack.pop();
         }
 
         else
@@ -47,12 +53,12 @@ int main()
             iter = priority.find(el);
             if(iter != priority.end())
             {
-                while( ( !stack.empty() ) && priority[stack.top()] >= priority[el])
+                while( (!stack.empty()) && priority[stack.top()] >= priority[el])
                 {
-                    cout <<stack.top();
+                    cout << stack.top();
                     stack.pop();
                 }
-                stack.pop();
+                stack.push(el);
             }
         }
     }
@@ -63,5 +69,16 @@ int main()
 		stack.pop();
 	}
 	cout << endl;
+
+
+    file.close();
+    return 0;
+
+}
+
+
+int main()
+{
+    ArithmecitExchange("in.txt");
     return 0;
 }
