@@ -20,12 +20,12 @@ int floydSort(vectorEl v)
     {
 
         int size = v.size()-1;                // соответствие индексам
-        int i, j, minIndex;
-        bool finished;
+        int i, j, min, minIndex;
         ElementType temp;
 
         while(size > 1)                       // когда остался не только один ноль + верхушка дерева
         {
+            min = INT32_MAX;                  // для поиска минимума
             for(j = size; j >= 2; j--)
             {
                 i = floor(j / 2);
@@ -33,10 +33,15 @@ int floydSort(vectorEl v)
                 {
                     swap(v[i], v[j]);
                 }
+                if(v[j] <= min)               // сделал, чтобы индекс элемента был иницализирован
+                {                             // в любом случае, даже если все элементы равны
+                    minIndex = i;
+                    min = v[i];
+                }
 
             }
 
-            minIndex = distance(v.begin(), min_element(v.begin() + 1, v.end())); // наименьший элемент
+
             cout << v[1] << " ";
             swap(v[1], v[minIndex]);
             v.erase(v.begin() + minIndex);
