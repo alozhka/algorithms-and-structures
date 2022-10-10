@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <algorithm>
 #include <math.h>
 using namespace std;
 #define ElementType int
@@ -21,7 +20,6 @@ int floydSort(vectorEl v)
 
         int size = v.size()-1;                // соответствие индексам
         int i, j, min, minIndex;
-        ElementType temp;
 
         while(size > 1)                       // когда остался не только один ноль + верхушка дерева
         {
