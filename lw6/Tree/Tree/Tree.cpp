@@ -74,6 +74,10 @@ Tree* findMostLeft(Tree* tr)
     {
         return NULL;
     }
+    else if (tr->l == NULL)
+    {
+        return tr;
+    }
     else
     {
         while (tr->l != NULL)
@@ -111,10 +115,12 @@ void deleteNode(Tree* &tr, ChildType el)
         else // оба не NULL
         {
             Tree* temp = new Tree;
+            Tree* mostLeft = new Tree;
             temp = tr;
             tr = temp->r;
+            mostLeft = findMostLeft(tr);
+            mostLeft->l = temp->l;
             delete temp;
-            tr->l = findMostLeft(tr);
 
         }
     }
@@ -170,7 +176,8 @@ int main()
 
     infix_bypass(tree);
     puts("");
-    deleteNode(tree, 48);
+    deleteNode(tree, 67);
+    puts("Удалили элемент");
     infix_bypass(tree);
     puts("");
     prefix_bypass(tree);
