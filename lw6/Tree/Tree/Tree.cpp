@@ -68,13 +68,58 @@ void postfix_bypass(Tree* tr)
 }
 
 
+Tree* findMostLeft(Tree* tr)
+{
+    if (tr == NULL)
+    {
+        return NULL;
+    }
+    else
+    {
+        while (tr->l != NULL)
+        {
+            tr = tr->l;
+        }
+        return tr;
+    }
+};
 void deleteNode(Tree* &tr, ChildType el)
 {
     if (tr->value == el)
     {
-        delete(tr);
-        tr = NULL;
+        // если нашли
+        if (tr->l == NULL && tr->r == NULL)
+        {
+            delete tr;
+            tr = NULL;
+        } 
+        else if (tr->l != NULL && tr->r == NULL)
+        {
+            Tree* temp = new Tree;
+            temp = tr;
+            tr = temp->l;
+            delete temp;
+            
+        }
+        else if (tr->l == NULL && tr->r != NULL)
+        {
+            Tree* temp = new Tree;
+            temp = tr;
+            tr = temp->r;
+            delete temp;
+        }
+        else // оба не NULL
+        {
+            Tree* temp = new Tree;
+            temp = tr;
+            tr = temp->r;
+            delete temp;
+            tr->l = findMostLeft(tr);
+
+        }
     }
+
+    // ищем нужный элемент дальше
     else if (el < tr->value)
     {
         if (tr->l != NULL)
@@ -88,8 +133,13 @@ void deleteNode(Tree* &tr, ChildType el)
 }
 void deleteTree(Tree *tr)
 {
-    delete(tr);
-    tr = NULL;
+    if (tr != NULL)
+    {
+        deleteTree(tr->l);
+        deleteTree(tr->r);
+        delete tr;
+        tr = NULL;
+    }
 }
 
 
@@ -120,11 +170,15 @@ int main()
 
     infix_bypass(tree);
     puts("");
+    deleteNode(tree, 48);
+    infix_bypass(tree);
+    puts("");
     prefix_bypass(tree);
     puts("");
     postfix_bypass(tree);
     cout << endl;
 
+    deleteTree(tree);
     return 0;
 }
 
