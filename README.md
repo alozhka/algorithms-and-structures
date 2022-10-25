@@ -6,3 +6,5 @@ ALgorithms:
   Stack:			lw3
   Dijkstra's algorithm:		lw4
   Floyd's sort:			lw5
+  BinaryTree:			lw6
+  MultilevelTree:		lw7
