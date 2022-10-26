@@ -138,23 +138,3 @@ int main()
 
     return 0;
 }
-
-/*
-void insert(Tree *&tr, int level, ElType el)
-{
-    if (tr == NULL)
-    {
-        tr = new Tree;
-        tr->v = el;
-        tr->lvl = level;
-    }
-    else if(tr->lvl < level)
-    {
-        insert(tr->children, level, el);
-    }
-    else if(tr->lvl = level)
-    {
-        insert(tr->bro, level, el);
-    }
-} 
-*/
