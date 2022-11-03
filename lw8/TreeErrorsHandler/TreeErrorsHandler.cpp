@@ -1,4 +1,15 @@
 #include <iostream>
+using namespace std;
+#define ElType string
+
+struct Tree
+{
+    ElType v;           // value
+    int lvl;            // level
+    Tree* children;
+    Tree* bro;
+    Tree* parent;
+};
 
 Tree* defineTree()
 {
@@ -28,11 +39,17 @@ Tree* defineTree()
     tree->children->bro->bro->children = new Tree;
     tree->children->bro->bro->parent = tree;
 
-    tree->children->bro->bro->children->v = "fj"; // нижний
+    tree->children->bro->bro->children->v = "fj"; // fj на 2 уровне
     tree->children->bro->bro->children->lvl = 2;
     tree->children->bro->bro->children->bro = NULL;
-    tree->children->bro->bro->children->children = NULL;
+    tree->children->bro->bro->children->children = new Tree;
     tree->children->bro->bro->children->parent = tree->children->bro->bro;
+
+    tree->children->bro->bro->children->children->v = "fj"; // fj на 3 уровне
+    tree->children->bro->bro->children->children->lvl = 3;
+    tree->children->bro->bro->children->children->children = NULL;
+    tree->children->bro->bro->children->children->bro = NULL;
+    tree->children->bro->bro->children->children->parent = tree->children->bro->bro->children;
 
     tree->children->bro->children->lvl = 2;
     tree->children->bro->children->v = "de";
@@ -40,7 +57,7 @@ Tree* defineTree()
     tree->children->bro->children->children = NULL;
     tree->children->bro->children->parent = tree->children->bro;
 
-    tree->children->bro->children->bro->v = "de"; // правый
+    tree->children->bro->children->bro->v = "de"; // правый de
     tree->children->bro->children->bro->lvl = 2;
     tree->children->bro->children->bro->bro = NULL;
     tree->children->bro->children->bro->children = NULL;
@@ -48,6 +65,8 @@ Tree* defineTree()
 
     return tree;
     /*
+    Levels:
+
     0                           ab
 
     1       bc                  cd                  fj
@@ -59,27 +78,21 @@ Tree* defineTree()
 
 void printTreeErrors(Tree *tr)
 {
-    if (tr == NULL)
+    if (tr != NULL)
     {
-        return NULL;
-    } // != NULL
-    else if (tr->bro != NULL)
-    {
-        Tree *temp = new Tree;
-        temp = tr;
-
-    }
-    else if (tr->children != NULL)
-    {
-        Tree *temp = new Tree;
-        temp = tr;
-        while (tr->l != NULL)
+        printTreeErrors(tr->children);
+        // если дети
+        if (tr->parent != NULL && tr->v == tr->parent->v)
         {
-            tr = tr->l;
+            cout << tr->parent->v << tr->parent->lvl <<  " " << tr->v << tr->lvl << endl;
         }
-        return tr;
+        // если братья
+        if (tr->bro != NULL && tr->v == tr->bro->v)
+        {
+            cout << tr->bro->v << tr->bro->lvl << " " << tr->v << tr->lvl << endl;
+        }
+        printTreeErrors(tr->bro);
     }
-    return NULL
 }
 
 
@@ -89,4 +102,6 @@ int main()
 
     tree = defineTree();
 
+    printTreeErrors(tree);
+    cout << endl;
 }
