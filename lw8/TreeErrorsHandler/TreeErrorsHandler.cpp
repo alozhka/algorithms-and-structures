@@ -1,6 +1,8 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 #define ElType string
+
 
 struct Tree
 {
@@ -10,6 +12,9 @@ struct Tree
     Tree* bro;
     Tree* parent;
 };
+
+
+typedef vector<Tree*> listOfNodes;
 
 Tree* defineTree()
 {
@@ -76,22 +81,45 @@ Tree* defineTree()
 }
 
 
-void printTreeErrors(Tree *tr)
+listOfNodes listOfTreeErrors(Tree *tr)
 {
     if (tr != NULL)
     {
-        printTreeErrors(tr->children);
+        listOfTreeErrors(tr->children);
+
+        // объявляем вектор, куда всё запишется
+        listOfNodes nodes;
         // если дети
         if (tr->parent != NULL && tr->v == tr->parent->v)
         {
-            cout << tr->parent->v << tr->parent->lvl <<  " " << tr->v << tr->lvl << endl;
+
+            // если уже есть такой элемент, то пушим только один
+            if(nodes.back() != tr->parent)
+            {
+                nodes.push_back(tr->parent);
+                nodes.push_back(tr);
+            }
+            else
+            {
+                nodes.push_back(tr);
+            }
         }
         // если братья
         if (tr->bro != NULL && tr->v == tr->bro->v)
         {
-            cout << tr->bro->v << tr->bro->lvl << " " << tr->v << tr->lvl << endl;
+            if(nodes.back() != tr)
+            {
+                nodes.push_back(tr);
+                nodes.push_back(tr->bro);
+            }
+            else
+            {
+                nodes.push_back(tr->bro);
+            }
         }
-        printTreeErrors(tr->bro);
+        
+        listOfTreeErrors(tr->bro);
+        return nodes;
     }
 }
 
@@ -102,6 +130,6 @@ int main()
 
     tree = defineTree();
 
-    printTreeErrors(tree);
+    listOfTreeErrors(tree);
     cout << endl;
 }
