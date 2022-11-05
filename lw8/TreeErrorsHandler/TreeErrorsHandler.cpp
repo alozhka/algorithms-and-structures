@@ -12,9 +12,8 @@ struct Tree
     Tree* bro;
     Tree* parent;
 };
-
-
 typedef vector<Tree*> listOfNodes;
+
 
 Tree* defineTree()
 {
@@ -69,57 +68,75 @@ Tree* defineTree()
     tree->children->bro->children->bro->parent = tree->children->bro;
 
     return tree;
-    /*
+}
+/*
     Levels:
 
     0                           ab
 
     1       bc                  cd                  fj
-
+    
     2                       de      de              fj
+
+    3                                               fj
     */
-}
 
 
-listOfNodes listOfTreeErrors(Tree *tr)
+void findTreeErrors(Tree *tr, listOfNodes &list)
+// находит пары циклов
 {
     if (tr != NULL)
     {
-        listOfTreeErrors(tr->children);
-
-        // объявляем вектор, куда всё запишется
-        listOfNodes nodes;
         // если дети
         if (tr->parent != NULL && tr->v == tr->parent->v)
         {
-
-            // если уже есть такой элемент, то пушим только один
-            if(nodes.back() != tr->parent)
-            {
-                nodes.push_back(tr->parent);
-                nodes.push_back(tr);
-            }
-            else
-            {
-                nodes.push_back(tr);
-            }
+            list.push_back(tr->parent);
+            list.push_back(tr);
         }
         // если братья
         if (tr->bro != NULL && tr->v == tr->bro->v)
         {
-            if(nodes.back() != tr)
-            {
-                nodes.push_back(tr);
-                nodes.push_back(tr->bro);
-            }
-            else
-            {
-                nodes.push_back(tr->bro);
-            }
+            list.push_back(tr);
+            list.push_back(tr->bro);
         }
-        
-        listOfTreeErrors(tr->bro);
-        return nodes;
+
+        findTreeErrors(tr->children, list);
+        findTreeErrors(tr->bro, list);
+    }
+}
+
+
+void printTreeErrors(Tree *tr)
+{
+    listOfNodes list;
+    findTreeErrors(tr, list);
+    bool is_sequence = false;
+    ElType el;
+
+    // уберём повторяющиеся узлы из пар циклов
+    int size = list.size();
+    el = list.at(0)->v;
+    for (int i = 1; i < size; i+= 2)
+    {
+        // проверка на последовательность
+        // если новая послед-ть, то меняем значение элемента, 
+        // чтобы так сравнить следующие пары
+        if (el != list.at(i)->v)
+        {
+            is_sequence = false;
+            el = list.at(i)->v;
+        }
+
+        if(!is_sequence)
+        {
+            cout << list.at(i-1)->v << " " << list.at(i-1)->lvl << " ";
+            cout << list.at(i)->v << " " << list.at(i)->lvl << " ";
+            is_sequence = true;
+        }
+        else
+        {
+            cout << list.at(i)->v << " " << list.at(i)->lvl << " ";
+        }
     }
 }
 
@@ -127,9 +144,8 @@ listOfNodes listOfTreeErrors(Tree *tr)
 int main()
 {
     Tree *tree = new Tree;
-
     tree = defineTree();
 
-    listOfTreeErrors(tree);
+    printTreeErrors(tree);
     cout << endl;
 }
