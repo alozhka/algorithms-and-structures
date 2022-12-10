@@ -173,5 +173,6 @@ int main()
     convertListToOrientedMatrix(list, adj,  Amount);
 
     topologicalSort(adj, Amount);
+    cout << endl;
     return 0;
 }
