@@ -1,1 +1,7 @@
-﻿
+﻿  TopologicalSortVS.cpp
+X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(20,19): warning C4101: node2: неиспользованная локальная переменная
+X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(20,12): warning C4101: node1: неиспользованная локальная переменная
+X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(20,26): warning C4101: weight: неиспользованная локальная переменная
+X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(57): warning C4715: initBranchList: значение возвращается не при всех путях выполнения
+  LINK : не найден или не выполнена сборка X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\x64\Debug\TopologicalSortVS.exe при последней инкрементной компоновке; выполняется полная компоновка
+  TopologicalSortVS.vcxproj -> X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\x64\Debug\TopologicalSortVS.exe
