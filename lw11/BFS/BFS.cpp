@@ -81,7 +81,7 @@ void convertListToMatrix(BranchList &branches, AdjecencyMatrix &matrix, int coun
 void dfs(AdjecencyMatrix graphMatrix, int amountVert)
 {
 	bool visited[Amount+1];
-	std::stack <int> stack;
+	stack <int> stack;
 	int current;
 	int i;
 
