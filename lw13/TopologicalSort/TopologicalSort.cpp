@@ -1,9 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <stack>
+#include <vector>
 using namespace std;
 
-#define Amount 5
+#define Amount 6
 
 struct Branch
 {
@@ -14,7 +15,7 @@ typedef int AdjecencyMatrix[Amount+1][Amount+1];
 
 
 
-int initBranchList(string dest, BranchList &branches, int amount)
+int initBranchList(string dest, BranchList &branches, int amountBranches)
 {
     // инициализация
     ifstream file (dest);
@@ -29,13 +30,13 @@ int initBranchList(string dest, BranchList &branches, int amount)
     {
 
         file >> i;
-        if (i == amount)
+        if (i == amountBranches)
         {
 
             if(!file.eof())
             {
 
-                for(i = 1; !file.eof(), i <= amount; i++)
+                for(i = 1; !file.eof(), i <= amountBranches; i++)
                 {
                     if (!file.eof()) file >> branches[i].node1;
                     if (!file.eof()) file >> branches[i].node2;
@@ -43,7 +44,7 @@ int initBranchList(string dest, BranchList &branches, int amount)
                 }
             }
 
-            if (i-1 != amount)
+            if (i-1 != amountBranches)
             {
                 cout << "Введены не все данные\n";
                 return 0;
@@ -76,44 +77,91 @@ void convertListToOrientedMatrix(BranchList &branches, AdjecencyMatrix &matrix, 
     }
 }
 
-void topologicalSort(AdjecencyMatrix &adj, int amountNodes)
+void dfs(AdjecencyMatrix graphMatrix, int amountVert)
 {
-    bool visited[Amount+1], noEnteringNodes;
-	stack <int> stack, backRoute;
-	int cur, i;
+	bool visited[Amount+1];
+	stack <int> stack;
+	int current;
+	int i;
 
-	for (i = 1; i <= amountNodes; i++)
+	for (i = 1; i <= amountVert; i++)
 	{
 		visited[i] = false;
 	}
 
 	i = 1;
 	stack.push(i);
-    // обходим, ищем маршрут обратного выхода
-    // для замены старых значений в будущем
 	while (!stack.empty())
 	{
-        noEnteringNodes = true;
-		cur = stack.top();
+		current = stack.top();
 		stack.pop();
-		if (visited[cur] == false)
+		if (visited[current] == false)
 		{
-			visited[cur] = true;
-		} 
+			visited[current] = true;
+			cout << current << " ";
+		}
 		for (i = 1; i <= amountVert; i++)
 		{
-			if (adj[cur][i] > 0 && visited[i] == false)
+			if (graphMatrix[current][i] > 0 && visited[i] == false)
 			{
-                noEnteringNodes = false;
 				stack.push(i);
 			}
 		}
-        if (noEnteringNodes)
+    }
+}
+
+
+void topologicalSort(AdjecencyMatrix &adj, int amountNodes)
+{
+    bool visited[Amount + 1],hasEnteredNodes, hasCycle = false, in_porgess[Amount + 1];
+    int enter[Amount + 1], exit[Amount + 1];
+	stack <int> stack;
+    vector <int> route;
+	int cur, i, time = 1;
+    string result = "";
+
+	for (i = 1; i <= amountNodes; i++)
+	{
+		visited[i] = false;
+        enter[i] = 0;
+        exit[i] = 0;
+        in_porgess[i] = false;
+	}
+
+	stack.push(1);
+	route.push_back(1);
+	while (!stack.empty())
+	{
+        hasEnteredNodes = false;
+        
+		cur = stack.top();
+		stack.pop();
+
+		if (visited[cur] == false)
+		{
+			visited[cur] = true;
+		}
+
+        if (exit[cur] == 0 && enter[cur] != 0)
         {
-            backRoute.push(cur);
+            exit[cur] = time;
+            in_porgess[cur] = false;
+        }
+        if (enter[cur] == 0)
+        {
+            enter[cur] = time;
+            in_porgess[cur] = true;
         }
     }
-    // замена старых значений новыми
+    // Если есть цикл
+    if (hasCycle)
+    {
+        cout << "Есть цикл, обход невозможен" << endl;
+    }
+    else 
+    {
+        cout << result << endl;
+    }
 }
 
 int main()
@@ -122,8 +170,8 @@ int main()
     AdjecencyMatrix adj;
     int amountBranches = 5;
     initBranchList("int.txt", list, amountBranches);
-    convertListToOrientedMatrix(list, adj,  amountBranches);
+    convertListToOrientedMatrix(list, adj,  Amount);
 
-    
+    topologicalSort(adj, Amount);
     return 0;
 }
