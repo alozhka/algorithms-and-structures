@@ -136,10 +136,14 @@ void bfs(AdjecencyMatrix adj, int cur, int amountNodes)
 
 void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
 {
-    bool visited[Amount + 1] = { false }, in_progress[Amount + 1] = { 0 }, noEnteringNodes;
+    // 0 - не вошли в вершину
+    // 1 - вошли внутрь вершины
+    // 2 - вышли из вершины
+    int nodeState[Amount + 1] = { 0 };
     int tin[Amount + 1] = { 0 }, tout[Amount + 1] = { 0 };
+
     stack <int> stack, route;
-    int cur, i, time = 1;
+    int cur, i;
     string state = "in";
 
     stack.push(1);
@@ -149,39 +153,21 @@ void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
     // для замены старых значений в будущем
     while (!stack.empty())
     {
-        noEnteringNodes = true;
         cur = stack.top();
         stack.pop();
 
-        if (visited[cur] == false)
+        if (nodeState[cur] == 0 && state == "in")
         {
-            visited[cur] = true;
-            cout << cur << " ";
-        }
-
-        if (tin[cur] != 0 && tout[cur] == 0)
-        {
-            in_progress[cur] = false;
-            tout[cur] = time;
-        }
-        if (tin[cur] == 0)
-        {
-            in_progress[cur] = true;
-            tin[cur] = time;
+            nodeState[cur] = 1;
         }
 
         for (i = 1; i <= amountNodes; i++)
         {
             if (adj[cur][i] > 0)
             {
-                noEnteringNodes = false;
                 stack.push(i);
                 if (state == "in") route.push(i);
-                time += 1;
             }
-        }
-        if (noEnteringNodes)
-        {
         }
 
         if (stack.empty())
