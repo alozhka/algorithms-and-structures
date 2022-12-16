@@ -133,6 +133,11 @@ void bfs(AdjecencyMatrix adj, int cur, int amountNodes)
     }
 }
 
+void testRecursive(AdjecencyMatrix& adj, int amountNodes)
+{
+    int tin[Amount + 1] = { 0 }, tout[Amount + 1] = { 0 }, time = 0;
+   
+}
 
 void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
 {
