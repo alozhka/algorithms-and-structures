@@ -148,6 +148,7 @@ int main()
     setlocale(LC_ALL, "rus");
     BranchList list;
     AdjecencyMatrix adj;
+    //вариант без цикла
     int amountBranches = 9;
     initBranchList("in.txt", list, amountBranches);
     convertListToOrientedMatrix(list, adj, amountBranches);
