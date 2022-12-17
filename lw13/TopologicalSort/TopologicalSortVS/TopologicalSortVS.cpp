@@ -139,13 +139,13 @@ namespace test
 {
     bool topologicalRecursive(AdjecencyMatrix& adj, int &amountNodes, int (&tin)[Amount + 1], int (&tout)[Amount + 1], int &time, int (&nodeState)[Amount + 1], int& node)
     {
+        bool hasCycle;
         time++;
         tin[node] = time;
         if (nodeState[node] == 1)
         // попали в вершину, из которой не вышли => есть цикл
         {
-            cout << "Из " << node << " узла идёт цикл, обход невозможен" << endl;
-            return false;
+            return true;
         }
         else
         {
@@ -157,13 +157,17 @@ namespace test
         {
             if (adj[node][i] > 0)
             {
-                test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
+                hasCycle = test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
+                if (hasCycle)
+                {
+                    return true;
+                }
             }
         }
         time++;
         tout[node] = time;
         nodeState[node] = 2;
-        return true;
+        return false;
     }
     void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
     {
@@ -174,6 +178,7 @@ namespace test
         int nodeState[Amount + 1] = { 0 };
         int tin[Amount + 1] = { 0 }, tout[Amount + 1] = { 0 };
         int time = 0, cur = 1, i;
+        bool hasCycle = false;
         
         tin[1] = 0;
         nodeState[1] = 1;
@@ -181,7 +186,12 @@ namespace test
         {
             if (adj[cur][i] > 0)
             {
-                test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
+                hasCycle = test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
+                if (hasCycle)
+                {
+                    cout << "Есть цикл, обход невозможен" << endl;
+                    return;
+                }
             }
         }
         tout[1] = time;
@@ -276,6 +286,14 @@ int main()
     AdjecencyMatrix adj;
     int amountBranches = 8;
     initBranchList("in.txt", list, amountBranches);
+    convertListToOrientedMatrix(list, adj, amountBranches);
+
+    test::topologicalSort(adj, Amount);
+    cout << endl;
+
+    //вариант с циклом
+    amountBranches = 9;
+    initBranchList("cyclic_graph.txt", list, amountBranches);
     convertListToOrientedMatrix(list, adj, amountBranches);
 
 
