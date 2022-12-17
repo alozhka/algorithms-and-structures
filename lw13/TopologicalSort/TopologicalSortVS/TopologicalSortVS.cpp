@@ -4,7 +4,7 @@
 #include <queue>
 using namespace std;
 
-constexpr auto Amount = 7;
+constexpr auto Amount = 8;
 
 struct Branch
 {
@@ -139,19 +139,20 @@ namespace test
 {
     bool topologicalRecursive(AdjecencyMatrix& adj, int &amountNodes, int (&tin)[Amount + 1], int (&tout)[Amount + 1], int &time, int (&nodeState)[Amount + 1], int& node)
     {
-        /*switch (nodeState)
-        {
-        case 2:
-            break;
-        case 1:
-            nodeState = 2;
-            break;
-        case 0:
-            nodeState = 1;
-            break;
-        }*/
         time++;
         tin[node] = time;
+        if (nodeState[node] == 1)
+        // попали в вершину, из которой не вышли => есть цикл
+        {
+            cout << "Из " << node << " узла идёт цикл, обход невозможен" << endl;
+            return false;
+        }
+        else
+        {
+            nodeState[node] = 1;
+        }
+
+
         for (int i = 1; i <= amountNodes; i++)
         {
             if (adj[node][i] > 0)
@@ -161,6 +162,7 @@ namespace test
         }
         time++;
         tout[node] = time;
+        nodeState[node] = 2;
         return true;
     }
     void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
@@ -174,6 +176,7 @@ namespace test
         int time = 0, cur = 1, i;
         
         tin[1] = 0;
+        nodeState[1] = 1;
         for (i = 1; i <= amountNodes; i++)
         {
             if (adj[cur][i] > 0)
@@ -181,15 +184,36 @@ namespace test
                 test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
             }
         }
+        tout[1] = time;
+        nodeState[1] = 2;
         
         for (i = 1; i <= amountNodes; i++)
         {
-            printf("in %d: %2d; ", i, tin[i]);
+            printf("in  %d:%2d;  ", i, tin[i]);
         }
         cout << endl;
         for (i = 1; i <= amountNodes; i++)
         {
-            printf("in %d: %2d; ", i, tout[i]);
+            printf("out %d:%2d;  ", i, tout[i]);
+        }
+        cout << endl;
+        for (i = 1; i <= amountNodes; i++)
+        {
+            printf("state %d:%2d;  ", i, nodeState[i]);
+        }
+        cout << endl;
+        // печать
+        for (cur = 0, time = 0; cur < amountNodes; time++)
+        {
+            for (i = 1; i <= amountNodes; i++)
+            {
+                if (tin[i] == time)
+                {
+                    cout << i;
+                    cur++;
+                    break;
+                }
+            }
         }
     }
 }
@@ -247,18 +271,14 @@ void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
 
 int main()
 {
+    setlocale(LC_ALL, "rus");
     BranchList list;
     AdjecencyMatrix adj;
-    int amountBranches = 7;
+    int amountBranches = 8;
     initBranchList("in.txt", list, amountBranches);
     convertListToOrientedMatrix(list, adj, amountBranches);
 
-    dfs(adj, Amount);
-    cout << endl;
-    bfs(adj, 1, Amount);
-    cout << endl;
-    topologicalSort(adj, Amount);
-    cout << endl;
+
     test::topologicalSort(adj, Amount);
     cout << endl;
     return 0;
