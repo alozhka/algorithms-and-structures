@@ -1,7 +1,6 @@
 ﻿#include <fstream>
 #include <iostream>
 #include <stack>
-#include <vector>
 #include <queue>
 using namespace std;
 
@@ -19,7 +18,7 @@ int initBranchList(string dest, BranchList& branches, int amountBranches)
 {
     // инициализация
     ifstream file(dest);
-    int i, node1, node2, weight;
+    int i;
 
     if (!file.is_open())
     {
@@ -56,6 +55,10 @@ int initBranchList(string dest, BranchList& branches, int amountBranches)
             return 0;
         }
     }
+    else
+    {
+        return 0;
+    }
 }
 void convertListToOrientedMatrix(BranchList& branches, AdjecencyMatrix& matrix, int countOfBranches)
 {
@@ -77,8 +80,7 @@ void dfs(AdjecencyMatrix graphMatrix, int amountVert)
 {
     bool visited[Amount + 1] = { false };
     stack <int> stack;
-    int current;
-    int i;
+    int current, i;
 
     i = 1;
     stack.push(i);
@@ -101,7 +103,7 @@ void dfs(AdjecencyMatrix graphMatrix, int amountVert)
     }
 }
 /**
- * @brief Takes a breadth-first-out algorytm.
+ * @brief Takes a breath-first-out algorytm.
  * Gets maxtrix, beginning element and amount of nodes in matrix
 */
 void bfs(AdjecencyMatrix adj, int cur, int amountNodes)
@@ -133,14 +135,63 @@ void bfs(AdjecencyMatrix adj, int cur, int amountNodes)
     }
 }
 
-void topologicalRecursive(AdjecencyMatrix& adj, int node)
+namespace test
 {
-
-}
-void testRecursive(AdjecencyMatrix& adj, int amountNodes)
-{
-    int tin[Amount + 1] = { 0 }, tout[Amount + 1] = { 0 }, time = 0;
-   
+    bool topologicalRecursive(AdjecencyMatrix& adj, int &amountNodes, int (&tin)[Amount + 1], int (&tout)[Amount + 1], int &time, int (&nodeState)[Amount + 1], int& node)
+    {
+        /*switch (nodeState)
+        {
+        case 2:
+            break;
+        case 1:
+            nodeState = 2;
+            break;
+        case 0:
+            nodeState = 1;
+            break;
+        }*/
+        time++;
+        tin[node] = time;
+        for (int i = 1; i <= amountNodes; i++)
+        {
+            if (adj[node][i] > 0)
+            {
+                test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
+            }
+        }
+        time++;
+        tout[node] = time;
+        return true;
+    }
+    void topologicalSort(AdjecencyMatrix& adj, int amountNodes)
+    {
+        // для nodeState (проверка на отсутствие циклов)
+        // 0 - не вошли в вершину
+        // 1 - вошли внутрь вершины
+        // 2 - вышли из вершины
+        int nodeState[Amount + 1] = { 0 };
+        int tin[Amount + 1] = { 0 }, tout[Amount + 1] = { 0 };
+        int time = 0, cur = 1, i;
+        
+        tin[1] = 0;
+        for (i = 1; i <= amountNodes; i++)
+        {
+            if (adj[cur][i] > 0)
+            {
+                test::topologicalRecursive(adj, amountNodes, tin, tout, time, nodeState, i);
+            }
+        }
+        
+        for (i = 1; i <= amountNodes; i++)
+        {
+            printf("in %d: %2d; ", i, tin[i]);
+        }
+        cout << endl;
+        for (i = 1; i <= amountNodes; i++)
+        {
+            printf("in %d: %2d; ", i, tout[i]);
+        }
+    }
 }
 
 
@@ -207,6 +258,8 @@ int main()
     bfs(adj, 1, Amount);
     cout << endl;
     topologicalSort(adj, Amount);
+    cout << endl;
+    test::topologicalSort(adj, Amount);
     cout << endl;
     return 0;
 }

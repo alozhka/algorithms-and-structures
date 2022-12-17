@@ -1,6 +1,2 @@
 ﻿  TopologicalSortVS.cpp
-X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(22,19): warning C4101: node2: неиспользованная локальная переменная
-X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(22,12): warning C4101: node1: неиспользованная локальная переменная
-X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(22,26): warning C4101: weight: неиспользованная локальная переменная
-X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\TopologicalSortVS\TopologicalSortVS.cpp(59): warning C4715: initBranchList: значение возвращается не при всех путях выполнения
-  TopologicalSortVS.vcxproj -> X:\!Programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\x64\Debug\TopologicalSortVS.exe
+  TopologicalSortVS.vcxproj -> X:\!programming\GitHub\algorithms-and-structures\lw13\TopologicalSort\x64\Debug\TopologicalSortVS.exe
